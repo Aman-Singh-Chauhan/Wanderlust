@@ -127,13 +127,35 @@ module.exports.createListing = async(req, res, next) => {
 
  module.exports.updateListing = async (req,res)=>{
       let {id} = req.params;
-    let listing= await Listing.findByIdAndUpdate(id,{ ...req.body.listing});
+      const listing = await Listing.findById(id);
+
+      if(!listing){
+        req.flash("error","Listing requested for does not exist!");
+        return res.redirect("/listings");
+      }
+
+      const updatedData = { ...req.body.listing };
+
+      if (updatedData.location || updatedData.country) {
+        const response = await geocodingClient.forwardGeocode({
+          query: `${updatedData.location || listing.location || ""}, ${updatedData.country || listing.country || ""}`,
+          limit: 1,
+        }).send();
+
+        const feature = response.body?.features?.[0];
+        if (feature?.geometry) {
+          updatedData.geometry = feature.geometry;
+        }
+      }
+
+      Object.assign(listing, updatedData);
+
      if(req.file){
     let url = req.file.path;
       let filename = req.file.filename;
       listing.image = {url,filename};
-      await listing.save();
      }
+      await listing.save();
       req.flash("success","Listing Updated!");
       res.redirect(`/listings/${id}`);
 };
