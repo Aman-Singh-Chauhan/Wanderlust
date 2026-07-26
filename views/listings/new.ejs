@@ -3,7 +3,7 @@
    <div class="col-8 offset-2">
       <!-- <br/><br/> -->
     <h3> Create a New Listing</h3>
-    <% if (typeof error !== 'undefined' && error) { %>
+    <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <%= error %>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

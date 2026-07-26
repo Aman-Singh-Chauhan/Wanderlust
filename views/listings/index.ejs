@@ -109,7 +109,7 @@
     
       <div class="card col listing-card">
         <img 
-        src="<%= listing.image.url %>" 
+        src="<%= listing.image.url ? listing.image.url : '/assets/beach.webp' %>" 
         class="card-img-top" 
         alt="listing_image"
          style="height: 20rem"

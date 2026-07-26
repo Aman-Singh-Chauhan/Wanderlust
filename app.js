@@ -92,10 +92,16 @@ app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
     res.locals.currUser=req.user;
+    res.locals.isAuthenticated = req.isAuthenticated();
     next();
 });
 
 app.use("/listings", listingRouter);
+app.get("/assets/:filename", (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname,"assets", filename);
+    res.sendFile(filePath);
+  });
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
