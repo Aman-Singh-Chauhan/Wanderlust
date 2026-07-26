@@ -19,9 +19,11 @@ const LocalStrategy=require("passport-local");
 const User=require("./models/user.js");
 
 
+const listingController = require("./controllers/listings.js");
 const  listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
+const Listing = require("./models/listing.js");
 
 
 const dbUrl=process.env.ATLASDB_URL;
@@ -94,6 +96,11 @@ app.use((req,res,next)=>{
     res.locals.currUser=req.user;
     res.locals.isAuthenticated = req.isAuthenticated();
     next();
+});
+
+app.get("/",async (req,res)=>{
+    const allListings = await Listing.find({});
+    res.render("listings/index", { allListings });
 });
 
 app.use("/listings", listingRouter);
