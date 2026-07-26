@@ -109,6 +109,7 @@ app.get("/assets/:filename", (req, res) => {
     const filePath = path.join(__dirname,"assets", filename);
     res.sendFile(filePath);
   });
+  
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 

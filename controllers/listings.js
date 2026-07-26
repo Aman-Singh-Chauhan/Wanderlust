@@ -63,6 +63,7 @@ module.exports.createListing = async(req, res, next) => {
   limit: 1,
 })
   .send();
+ // console.log("Geocoding response:", response.body);
   let url;
   let filename;
    if(req.file){

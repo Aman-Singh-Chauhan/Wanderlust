@@ -1,5 +1,6 @@
  
  const User=require("../models/user");
+ const Listing = require("../models/listing");
  
  module.exports.renderSignupForm = (req, res) => {
     res.render("users/signup.ejs");
@@ -7,6 +8,25 @@
 module.exports.renderLoginForm = (req, res) => {
     res.render("users/login.ejs");
 };
+
+// module.exports.renderDashboard = async (req, res) => {
+//     const profileUser = req.user;
+//     const listings = await Listing.find({ owner: profileUser._id }).populate("owner");
+//     res.render("users/profile.ejs", { profileUser, listings });
+// };
+
+// module.exports.renderProfile = async (req, res) => {
+//     const { username } = req.params;
+//     const profileUser = await User.findOne({ username });
+
+//     if (!profileUser) {
+//         req.flash("error", "User not found!");
+//         return res.redirect("/listings");
+//     }
+
+//     const listings = await Listing.find({ owner: profileUser._id }).populate("owner");
+//     res.render("users/profile.ejs", { profileUser, listings });
+// };
  
  
  module.exports.signup=async(req,res,next)=>{

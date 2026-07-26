@@ -12,7 +12,7 @@
 
   <div class="card col-6 offset-3 show-card listing-card">
     <img 
-      src="<%= listing.image.url %>" 
+      src="<%= listing.image.url ? listing.image.url : '/assets/beach.webp' %>" 
       class="card-img-top show-img" 
       alt="listing_image"
     />
@@ -129,4 +129,4 @@
   </div>
 </div>
 
-<script src="/public/js/map.js"></script>
+<script src="/js/map.js"></script>
