@@ -41,15 +41,15 @@
        
       <div class="navbar-nav ms-auto">
           
-      <form class="d-flex" role="search">
+      <form class="d-flex" role="search" action="/listings/search" method="GET" id="navbar-search-form">
       <input class="form-control me-2 search-inp" 
-      type="search " 
+      type="search" 
+      name="q"
+      id="navbar-search-input"
       placeholder="Search destination" 
-      
-      
+      value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
       />
-      <button class="btn search-btn" 
-      type="submit"> 
+      <button class="btn search-btn" type="submit"> 
       <i class="fa-solid fa-magnifying-glass"></i>
         Search</button>
     </form>
@@ -70,3 +70,62 @@
     </div>
   </div>
 </nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('navbar-search-form');
+    const input = document.getElementById('navbar-search-input');
+
+    if (!form || !input) return;
+
+    let debounceTimer;
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const query = input.value.trim();
+        const listingsContainer = document.getElementById('listings-grid');
+
+        if (!listingsContainer) return;
+
+        fetch(`/listings/search?q=${encodeURIComponent(query)}`)
+          .then((res) => res.json())
+          .then((listings) => {
+            listingsContainer.innerHTML = '';
+
+            if (!listings.length) {
+              listingsContainer.innerHTML = '<div class="col-12"><div class="alert alert-secondary">No listings found.</div></div>';
+              return;
+            }
+
+            listings.forEach((listing) => {
+              const card = document.createElement('div');
+              card.className = 'col';
+
+              const imageUrl = listing.image && listing.image.url ? listing.image.url : '/assets/beach.webp';
+              card.innerHTML = `
+                <a href="/listings/${listing._id}" class="listing-link">
+                  <div class="card listing-card h-100">
+                    <img src="${imageUrl}" class="card-img-top" alt="listing image" style="height: 20rem; object-fit: cover;" />
+                    <div class="card-body">
+                      <p class="card-text">
+                        <b>${listing.title}</b><br/>
+                        ₹${Number(listing.price || 0).toLocaleString('en-IN')}/night
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              `;
+              listingsContainer.appendChild(card);
+            });
+
+            input.focus();
+          })
+          .catch((err) => {
+            console.error('Search failed', err);
+            listingsContainer.innerHTML = '<div class="col-12"><div class="alert alert-danger">Unable to load results.</div></div>';
+          });
+      }, 400);
+    });
+  });
+</script>

@@ -16,6 +16,34 @@ module.exports.index = async(req,res)=>{
         throw err;
     }
 }
+
+module.exports.searchListings = async(req,res)=>{
+    try{
+        const { q } = req.query;
+        const searchQuery = q ? q.trim() : "";
+
+        let filteredListings = [];
+
+        if (searchQuery) {
+            filteredListings = await Listing.find({
+                $or: [
+                    { title: { $regex: searchQuery, $options: "i" } },
+                    { location: { $regex: searchQuery, $options: "i" } },
+                    { country: { $regex: searchQuery, $options: "i" } }
+                ]
+            });
+        } else {
+            filteredListings = await Listing.find({});
+        }
+
+        res.json(filteredListings);
+    }
+    catch(err){
+        console.error("SEARCH ERROR:");
+        console.error(err);
+        res.status(500).json({ error: "Search failed" });
+    }
+}
 // module.exports.index = async(req,res) => {
 //   const allListings = await Listing.find({});
 //   res.render ("listings/index.ejs",{ allListings });
