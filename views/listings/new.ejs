@@ -9,7 +9,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     <% } %>
-   <form method ="POST" action ="/listings" novalidate class="needs-validation">
+   <form method ="POST" action ="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
      <div class="mb-3">
         <label for="title" class="form-label">Title</label>
      <input 
@@ -34,9 +34,10 @@
    </div>
       
    <div class="mb-3">
-      <label for="image" class="form-label">Listing Image URL</label>
-      <input name="listing[image][url]" type="url" class="form-control" placeholder="https://example.com/image.jpg" />
-   </div>
+      <label for="image" class="form-label">Upload Listing Image </label>
+      <input name="listing[image]" type="file" class="form-control"/>
+      required   
+    </div>
 
 
    <div class="row">  

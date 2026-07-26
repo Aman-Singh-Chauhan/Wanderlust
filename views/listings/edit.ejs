@@ -5,7 +5,9 @@
 <h3> Edit your Listing</h3>
     <form method="POST" action ="/listings/<%=listing._id%>?_method=PUT"
      novalidate
-     class="needs-validation">
+     class="needs-validation"
+     enctype="multipart/form-data"
+     >
      
      <div class="mb-3">
           <label for="title" class="form-label">Title</label>
@@ -34,10 +36,10 @@
 
 
        <div class="mb-3">
-         <label for="image" class="form-label">Image URL (optional)</label>
+         <label for="image" class="form-label">Upload Image  (optional)</label>
        <input 
-       name ="listing[image][url]" 
-       type="url" 
+       name ="listing[image]" 
+       type="file" 
        class="form-control"
        value="<%= listing.image && listing.image.url ? listing.image.url : '' %>"
        />
